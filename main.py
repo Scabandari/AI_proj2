@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 from copy import deepcopy
 from utils import add_data, separate_labels, rename_cols
 from naiveBayes import bernoulli
+from decisionTree import decision_tree
 
 """ 
 We're having issues that I'm sure everyone is, our predictions are not accurate. 
@@ -28,6 +29,7 @@ results = {'naive bayes': [],
 
 
 def print_results():
+    print("here")
     for key in results.keys():
         for experiment_ in results[key]:
             print("{}: {}".format(
@@ -55,6 +57,14 @@ results['naive bayes'].append(bernoulli(
     set1_xTest,
     set1_yTest,
     "Naive Bayes Bernoulli"))
+
+results['trees'].append(decision_tree(
+    set1_xTrain,
+    set1_yTrain,
+    set1_xTest,
+    set1_yTest,
+    "Decision Tree"
+))
 
 # now we can do basically the same thing again after we've augmented our training data
 # by copying all the rows making small changes in the features but keeping the labels
