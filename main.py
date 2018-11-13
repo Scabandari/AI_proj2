@@ -58,13 +58,6 @@ results['naive bayes'].append(bernoulli(
     set1_yTest,
     "Naive Bayes Bernoulli"))
 
-results['trees'].append(decision_tree(
-    set1_xTrain,
-    set1_yTrain,
-    set1_xTest,
-    set1_yTest,
-    "Decision Tree"
-))
 
 # now we can do basically the same thing again after we've augmented our training data
 # by copying all the rows making small changes in the features but keeping the labels
