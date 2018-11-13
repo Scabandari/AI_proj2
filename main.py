@@ -12,6 +12,9 @@ import matplotlib.pyplot as plt
 from copy import deepcopy
 from utils import add_data, separate_labels, rename_cols
 from naiveBayes import bernoulli
+from randomForests import random_forests
+
+# grid search https://machinelearningmastery.com/how-to-tune-algorithm-parameters-with-scikit-learn/
 
 """ 
 We're having issues that I'm sure everyone is, our predictions are not accurate. 
@@ -24,7 +27,8 @@ automated in the algo
 # description should describe hyper params as well
 results = {'naive bayes': [],
            'trees': [],
-           'random forests': []}
+           'random forests': [],
+           'gradient boosting': []}
 
 
 def print_results():
@@ -49,12 +53,12 @@ rename_cols(data_test)
 set1_xTrain, set1_yTrain, set1_xTest, set1_yTest = separate_labels(data_train, data_test)
 
 # # Naive Bayes
-results['naive bayes'].append(bernoulli(
-    set1_xTrain,
-    set1_yTrain,
-    set1_xTest,
-    set1_yTest,
-    "Naive Bayes Bernoulli"))
+# results['naive bayes'].append(bernoulli(
+#     set1_xTrain,
+#     set1_yTrain,
+#     set1_xTest,
+#     set1_yTest,
+#     "Naive Bayes Bernoulli"))
 
 # now we can do basically the same thing again after we've augmented our training data
 # by copying all the rows making small changes in the features but keeping the labels
@@ -70,49 +74,120 @@ results['naive bayes'].append(bernoulli(
 #     set1_yTest,
 #     "Naive Bayes Bernoulli with augmented training data"))
 
-print_results()
 
-"""Results not very good. Try Random forests"""
+"""Results not very good. Try Random forests?"""
 
 """Decision trees """
 accuracy = {}
 max_depths = []
 test_accuracies = []
 
-# for i in range(6, 40, 2):
-#     max_depths.append(i)
-#     tree = DecisionTreeClassifier(max_depth=i, random_state=0)
-#     tree.fit(set1_xTrain, set1_yTrain)
-#     train = tree.score(set1_xTrain, set1_yTrain)
-#     test = tree.score(set1_xTest, set1_yTest)
-#     test_accuracies.append(test)
-#     data = {'max depth': i,
-#      'train': train,
-#      'test': test}
-#     accuracy[i] = data
+for i in range(6, 40, 2):
+    max_depths.append(i)
+    tree = DecisionTreeClassifier(max_depth=i, random_state=0)
+    tree.fit(set1_xTrain, set1_yTrain)
+    train = tree.score(set1_xTrain, set1_yTrain)
+    test = tree.score(set1_xTest, set1_yTest)
+    test_accuracies.append(test)
+    data = {'max depth': i,
+     'train': train,
+     'test': test}
+    accuracy[i] = data
 
-# for data in accuracy.keys():
-#     print("\n\nMax depth: {}".format(accuracy[data]['max depth']))
-#     print("Accuracy of Decision Tree classifier on training set is: {:.3f}"
-#           .format(accuracy[data]['train']))
-#     # above accuracy is .99 which mean overfitting
-#     print("Accuracy of Decision Tree classifier on training setis: : {:.3f}"
-#           .format(accuracy[data]['test']))
-#
-# plt.barh(range(len(max_depths)), test_accuracies, align='center')
-# plt.yticks(np.arange(len(max_depths)), max_depths)
-# plt.xlabel("Accuracy")
-# plt.ylabel("Max depth")
-# plt.show()
+for data in accuracy.keys():
+    print("\n\nMax depth: {}".format(accuracy[data]['max depth']))
+    print("Accuracy of Decision Tree classifier on training set is: {:.3f}"
+          .format(accuracy[data]['train']))
+    # above accuracy is .99 which mean overfitting
+    print("Accuracy of Decision Tree classifier on testing set is: : {:.3f}"
+          .format(accuracy[data]['test']))
 
-
-
+plt.barh(range(len(max_depths)), test_accuracies, align='center')
+plt.yticks(np.arange(len(max_depths)), max_depths)
+plt.xlabel("Accuracy")
+plt.ylabel("Max depth")
+plt.show()
 
 
 """Random forests are basically a collection of decision trees, parameter ?max_forests?
     can be changed to control the randomness of each tree"""
-# forest = RandomForestClassifier(n_estimators=100, random_state=0)
-# forest.fit(set1_xTrain, set1_yTrain)
-# print("Accuracy score for Random forests on training data set 1: {}"
-#       .format(forest.score(set1_xTrain, set1_yTrain)))
-# # print("Accuracy score for Random forests on testing data set 1: {}".format(forest.score(set1_xTest, set1_yTest)))
+# Anyhow, regardless of notation issues, the two main parameters of RF are the number of
+#  trees grown and the number of predictors randomly tried at each split.
+# https://stats.stackexchange.com/questions/218781/what-are-the-model-parameters-and-hyperparameters-of-random-forest-classifier#218967
+# hyper_params_1 = [
+#     {'n_estimators': 125},
+#     {'n_estimators': 150},
+#     {'n_estimators': 200},
+#     {'n_estimators': 300},
+#     {'n_estimators': 400},
+#     {'n_estimators': 500},
+# ]
+
+# hyper_params_2 = [
+#     {
+#         'n_estimators': 105,
+#         'max_features': 5
+#     },
+#     {
+#         'n_estimators': 105,
+#         'max_features': 10
+#     },
+#     {
+#         'n_estimators': 105,
+#         'max_features': 15
+#     },
+#     {
+#         'n_estimators': 105,
+#         'max_features': 20
+#     },
+#     {
+#         'n_estimators': 105,
+#         'max_features': 25
+#     },
+#     {
+#         'n_estimators': 105,
+#         'max_features': 30
+#     },
+#     {
+#         'n_estimators': 105,
+#         'max_features': 35
+#     },
+#     {
+#         'n_estimators': 105,
+#         'max_features': 40
+#     },
+#     {
+#         'n_estimators': 105,
+#         'max_features': 45
+#     }
+# ]
+#
+# for hyp_par in hyper_params_2:
+#     results['random forests'].append(random_forests(
+#         set1_xTrain,
+#         set1_yTrain,
+#         set1_xTest,
+#         set1_yTest,
+#         "Random Forests with n_estimators: {} max_features{}".format(
+#             hyp_par['n_estimators'],
+#             hyp_par['max_features']),
+#         hyp_par
+#     ))
+
+# Best score found was n_estimators=150, max_features=10
+
+# still need to tune params here
+"""Gradient boosting is another ensemble classifier like Random Forests"""
+# results['gradient boosting'].append(random_forests(
+#         set1_xTrain,
+#         set1_yTrain,
+#         set1_xTest,
+#         set1_yTest,
+#         "Gradient boosting:"
+#     ))
+
+print_results()
+
+#################################################################################################
+##                    DATA SET 2 BELOW
+##############################################################################################
