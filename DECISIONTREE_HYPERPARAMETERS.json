@@ -1,0 +1,9 @@
+{
+  "Accuracy": 0.32684824902723736,
+  "Criterion": "entropy",
+  "Splitter": "best",
+  "Max_depth": 45,
+  "Min_sample_split": 2,
+  "Min_sample_leaf": 1,
+  "Min_impurity_decrease": 0
+}
