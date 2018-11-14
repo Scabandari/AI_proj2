@@ -19,7 +19,7 @@ from randomForests import random_forests
 """ 
 We're having issues that I'm sure everyone is, our predictions are not accurate. 
 K-folds should help. We're allowed to use it? Our train and test data is seperate,
-with k-folds normallly you treat it as one big group and the sectioning gets 
+with k-folds normally you treat it as one big group and the sectioning gets 
 automated in the algo
 """
 
