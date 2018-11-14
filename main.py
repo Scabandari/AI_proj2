@@ -12,12 +12,11 @@ import matplotlib.pyplot as plt
 from copy import deepcopy
 from utils import add_data, separate_labels, rename_cols
 from naiveBayes import bernoulli
-from decisionTree import decision_tree
 
 """ 
 We're having issues that I'm sure everyone is, our predictions are not accurate. 
 K-folds should help. We're allowed to use it? Our train and test data is seperate,
-with k-folds normallly you treat it as one big group and the sectioning gets 
+with k-folds normally you treat it as one big group and the sectioning gets 
 automated in the algo
 """
 
@@ -29,7 +28,6 @@ results = {'naive bayes': [],
 
 
 def print_results():
-    print("here")
     for key in results.keys():
         for experiment_ in results[key]:
             print("{}: {}".format(
@@ -57,7 +55,6 @@ results['naive bayes'].append(bernoulli(
     set1_xTest,
     set1_yTest,
     "Naive Bayes Bernoulli"))
-
 
 # now we can do basically the same thing again after we've augmented our training data
 # by copying all the rows making small changes in the features but keeping the labels
