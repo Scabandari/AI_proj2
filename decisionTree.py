@@ -10,14 +10,14 @@ def load_csv(train_data_filename, validation_data_filename):
     pass
     with open(train_data_filename, 'r') as file:
         reader = csv.reader(file, delimiter=',')
-    data = []
-    for row in reader:
-        # print(row)
-        new_row = [int(number) for number in row]
-        data.append(new_row)
-    file.close()
-    train_features = [d[:-1] for d in data]
-    train_labels = [d[-1] for d in data]
+        data = []
+        for row in reader:
+            # print(row)
+            new_row = [int(number) for number in row]
+            data.append(new_row)
+        file.close()
+        train_features = [d[:-1] for d in data]
+        train_labels = [d[-1] for d in data]
 
     with open(validation_data_filename, 'r') as file:
         reader = csv.reader(file, delimiter=',')
@@ -33,7 +33,7 @@ def load_csv(train_data_filename, validation_data_filename):
     return train_features, train_labels, test_features, test_labels
 
 
-def decision_tree(features, labels, test_features, test_labels):
+def decision_tree(features, labels, test_features, test_labels, model_save_filename):
     DECISION_TREE_ACCURACIES = {
         'Accuracy': 0
     }
@@ -82,13 +82,13 @@ def decision_tree(features, labels, test_features, test_labels):
                                              min_samples_leaf=DECISION_TREE_ACCURACIES['Min_sample_leaf'],
                                              min_impurity_decrease=DECISION_TREE_ACCURACIES['Min_impurity_decrease'])
     classifier.fit(features, labels)
-    with open('DTmodel.pkl', 'wb') as file:
+    with open(model_save_filename, 'wb') as file:
         pickle.dump(classifier, file)
 
     return DECISION_TREE_ACCURACIES
 
 
-def predict(testset_filename, model_filename):
+def predict(testset_filename, model_filename, test_result_filename):
     pass
     # load testset features
     with open(testset_filename, 'r') as file:
@@ -106,13 +106,14 @@ def predict(testset_filename, model_filename):
     modelfile.close()
 
     prediction = classifier.predict(testset_data)
-    with open('Test-dt.csv', 'w') as result_file:
+    with open(test_result_filename, 'w') as result_file:
         for i in range(len(prediction)):
             result_file.write('%d,%d\n' % (i + 1, prediction[i]))
 
 
 if __name__ == "__main__":
-    # features, labels, test_features, test_labels = load_csv('ds1Train.csv', 'ds1Val.csv')
-    # dt_parameters = decision_tree(features, labels, test_features, test_labels)
+    # features, labels, test_features, test_labels = load_csv('ds2Train.csv', 'ds2Val.csv')
+    # dt_parameters = decision_tree(features, labels, test_features, test_labels, 'DTmodel2.pkl')
     # print(dt_parameters)
-    predict('ds1Test.csv', 'DTmodel.pkl')
+    # predict('ds2Test.csv', 'DTmodel2.pkl', 'ds2Test-dt.csv')
+    predict('ds1Test.csv', 'DTmodel1.pkl', 'ds1Test-dt.csv')
