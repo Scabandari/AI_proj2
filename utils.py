@@ -2,6 +2,51 @@ import numpy as np
 import pandas as pd
 import math
 from random import randrange
+import pickle
+
+
+def combine_sets(sets):
+    return pd.concat(sets)
+
+
+def check_accuracy(model, test_features, test_labels):
+    predictions = model.predict(test_features)
+    predictions = predictions.tolist()
+    correct = 0
+    for index, data_point in enumerate(predictions):
+        if test_labels[index] == data_point:
+            correct += 1
+    return correct/len(test_labels)
+
+
+def model_fromPickle(file_name):
+    model_ = None
+    try:
+        with open(file_name, 'rb') as modelfile:
+            model_ = pickle.load(modelfile)
+    except FileNotFoundError:
+        pass
+    if model_:
+        return model_
+    else:
+        print("Could not load model from pickle")
+
+
+def output_files(classifier_, test_set, file_name):
+    """
+    Run the classifier on the test set and create the output file with the results
+    :param classifier:
+    :param test_set:
+    :param file_name: for output
+    :return:
+    """
+    predictions = classifier_.predict(test_set)
+    # print("predictions: {}".format(type(predictions)))
+    # print(predictions)
+    predictions = predictions.tolist()
+    with open(file_name, 'w') as file:
+        for index, num in enumerate(predictions):
+            file.write("{},{}\n".format(index, num))
 
 
 def add_data(train_set, percent_change, multiplier):
@@ -101,3 +146,11 @@ def variance_threshold(train_set, test_set, threshold_val, solution_set=None):
     return transformed_train, transformed_test
 
 
+# def see_answers(features):
+#     cols = features.columns
+#     for index, row in features.iterrows():
+#         for i, col in enumerate(cols):
+#             print(row[index], end="")
+#             if i % 32 == 0:
+#                 print("\n")
+#         print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
