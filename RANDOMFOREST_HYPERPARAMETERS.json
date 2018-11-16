@@ -1,0 +1,4 @@
+[
+  1:{},
+  2:{'Accuracy': 0.8735, 'Max_features': 0.2, 'Min_samples_leaf': 2, 'N_estimator': 26}
+]
