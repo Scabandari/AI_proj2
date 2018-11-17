@@ -112,9 +112,18 @@ if __name__ == "__main__":
     dt_parameters = decision_tree(features, labels, test_features, test_labels, 'DTmodel1.pkl')
     print(dt_parameters)
     predict('ds1Test.csv', 'DTmodel1.pkl', 'ds1Test-dt.csv')
-    # predict('ds1Test.csv', 'DTmodel1.pkl', 'ds1Test-dt.csv')
+
     # for i in range(0, 110, 10):
     #     classifier = tree.DecisionTreeClassifier(random_state=i)
     #     classifier.fit(features, labels)
     #     prediction = classifier.predict(test_features)
     #     print(i, accuracy_score(test_labels, prediction))
+
+    # with open('DTmodel2.pkl', 'rb') as modelfile:
+    #     classifier = pickle.load(modelfile)
+    # modelfile.close()
+    # prediction = classifier.predict(test_features)
+    # with open('ds2Val-dt.csv', 'w') as result_file:
+    #     for i in range(len(prediction)):
+    #         result_file.write('%d,%d\n' % (i + 1, prediction[i]))
+    # result_file.close()

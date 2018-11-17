@@ -44,7 +44,11 @@ def random_forest(features, labels, test_features, test_labels, model_save_filen
 
 
 if __name__ == "__main__":
-    features, labels, test_features, test_labels = load_csv('ds2Train.csv', 'ds2Val.csv')
+    def warn(*args, **kwargs):
+        pass
+    import warnings
+    warnings.warn = warn
+    features, labels, test_features, test_labels = load_csv('ds1Train.csv', 'ds1Val.csv')
     # rf_parameters = random_forest(features, labels, test_features, test_labels, 'RFmodel1.pkl')
     # print(rf_parameters)
     # predict('ds1Test.csv', 'RFmodel1.pkl', 'ds1Test-3.csv')
