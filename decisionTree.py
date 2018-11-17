@@ -108,10 +108,10 @@ def predict(testset_filename, model_filename, test_result_filename):
 
 
 if __name__ == "__main__":
-    features, labels, test_features, test_labels = load_csv('ds1Train.csv', 'ds1Val.csv')
-    dt_parameters = decision_tree(features, labels, test_features, test_labels, 'DTmodel1.pkl')
+    features, labels, test_features, test_labels = load_csv('ds1Train.csv', 'ds1Val.csv')  # load training data and validation data
+    dt_parameters = decision_tree(features, labels, test_features, test_labels, 'DTmodel1.pkl')  # find best tuned model and save to filename
     print(dt_parameters)
-    predict('ds1Test.csv', 'DTmodel1.pkl', 'ds1Test-dt.csv')
+    predict('ds1Test.csv', 'DTmodel1.pkl', 'ds1Test-dt.csv')  # run prediction on testset, using saved model, and save test result to file
 
     # for i in range(0, 110, 10):
     #     classifier = tree.DecisionTreeClassifier(random_state=i)
