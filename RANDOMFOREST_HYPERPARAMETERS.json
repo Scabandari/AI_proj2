@@ -1,4 +1,4 @@
 [
-  1:{},
-  2:{'Accuracy': 0.8735, 'Max_features': 0.2, 'Min_samples_leaf': 2, 'N_estimator': 26}
+  1:{'Accuracy': 0.5155642023346303, 'Max_features': 0.5000000000000001, 'Min_samples_leaf': 1, 'N_estimator': 25},
+  2:{'Accuracy': 0.875, 'Max_features': 0.4000000000000001, 'Min_samples_leaf': 1, 'N_estimator': 15}
 ]

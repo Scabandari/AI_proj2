@@ -41,24 +41,21 @@ def decision_tree(features, labels, test_features, test_labels, model_save_filen
     # source: https://scikit-learn.org/stable/modules/generated/sklearn.tree.DecisionTreeClassifier.html
     CRITERION = ['gini', 'entropy']
     SPLITTER = ['best', 'random']
-    MAX_DEPTH = list(np.arange(30, 60, 5))
+    MAX_DEPTH = list(np.arange(10, 60, 5))
     MAX_DEPTH.append(None)
-    MIN_SAMPLES_SPLIT = list(np.arange(2, 10, 2))
     # MIN_SAMPLES_SPLIT.append(2)
     MIN_SAMPLES_LEAF = list(np.arange(1, 5))
-    MIN_IMPURITY_DECREASE = list(np.arange(0.0, 0.5, 0.1))
+    MAX_FEATURES = list(np.arange(0.1, 0.5, 0.1))
 
-    for criterion, splitter, max_depth, min_samples_split, min_samples_leaf, min_impurity_decrease in itertools.product(
-            CRITERION, SPLITTER, MAX_DEPTH, MIN_SAMPLES_SPLIT, MIN_SAMPLES_LEAF, MIN_IMPURITY_DECREASE):
+    for criterion, splitter, max_depth, min_samples_leaf, max_features in itertools.product(
+            CRITERION, SPLITTER, MAX_DEPTH, MIN_SAMPLES_LEAF, MAX_FEATURES):
         classifier = tree.DecisionTreeClassifier(criterion=criterion, splitter=splitter, max_depth=max_depth,
-                                                 min_samples_split=min_samples_split,
-                                                 min_samples_leaf=min_samples_leaf, min_weight_fraction_leaf=0.0,
-                                                 max_features=None,
-                                                 random_state=None, max_leaf_nodes=None,
-                                                 min_impurity_decrease=min_impurity_decrease,
-                                                 min_impurity_split=None, class_weight=None, presort=False)
+                                                 min_samples_leaf=min_samples_leaf,
+                                                 max_features=max_features,
+                                                 random_state=0)
+        # print(max_features)
         classifier.fit(features, labels)
-        # print('finished fitting')
+
 
         validation_predicted = classifier.predict(test_features)
         # print('finished prediction')
@@ -71,16 +68,15 @@ def decision_tree(features, labels, test_features, test_labels, model_save_filen
             DECISION_TREE_ACCURACIES['Criterion'] = criterion
             DECISION_TREE_ACCURACIES['Splitter'] = splitter
             DECISION_TREE_ACCURACIES['Max_depth'] = max_depth
-            DECISION_TREE_ACCURACIES['Min_sample_split'] = min_samples_split
             DECISION_TREE_ACCURACIES['Min_sample_leaf'] = min_samples_leaf
-            DECISION_TREE_ACCURACIES['Min_impurity_decrease'] = min_impurity_decrease
+            DECISION_TREE_ACCURACIES['Max_features'] = max_features
 
     classifier = tree.DecisionTreeClassifier(criterion=DECISION_TREE_ACCURACIES['Criterion'],
                                              splitter=DECISION_TREE_ACCURACIES['Splitter'],
                                              max_depth=DECISION_TREE_ACCURACIES['Max_depth'],
-                                             min_samples_split=DECISION_TREE_ACCURACIES['Min_sample_split'],
                                              min_samples_leaf=DECISION_TREE_ACCURACIES['Min_sample_leaf'],
-                                             min_impurity_decrease=DECISION_TREE_ACCURACIES['Min_impurity_decrease'])
+                                             max_features=DECISION_TREE_ACCURACIES['Max_features'],
+                                             random_state=0)
     classifier.fit(features, labels)
     with open(model_save_filename, 'wb') as file:
         pickle.dump(classifier, file)
@@ -112,8 +108,13 @@ def predict(testset_filename, model_filename, test_result_filename):
 
 
 if __name__ == "__main__":
-    # features, labels, test_features, test_labels = load_csv('ds2Train.csv', 'ds2Val.csv')
-    # dt_parameters = decision_tree(features, labels, test_features, test_labels, 'DTmodel2.pkl')
-    # print(dt_parameters)
-    # predict('ds2Test.csv', 'DTmodel2.pkl', 'ds2Test-dt.csv')
+    features, labels, test_features, test_labels = load_csv('ds1Train.csv', 'ds1Val.csv')
+    dt_parameters = decision_tree(features, labels, test_features, test_labels, 'DTmodel1.pkl')
+    print(dt_parameters)
     predict('ds1Test.csv', 'DTmodel1.pkl', 'ds1Test-dt.csv')
+    # predict('ds1Test.csv', 'DTmodel1.pkl', 'ds1Test-dt.csv')
+    # for i in range(0, 110, 10):
+    #     classifier = tree.DecisionTreeClassifier(random_state=i)
+    #     classifier.fit(features, labels)
+    #     prediction = classifier.predict(test_features)
+    #     print(i, accuracy_score(test_labels, prediction))
